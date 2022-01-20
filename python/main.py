@@ -9,7 +9,8 @@ import random
 
 from wordle import Wordle
 from wordle_simulator import Simulator
-from wordle_guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy
+from wordle_guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy, \
+                                GeneticGuessPolicy
 
 def parse_args():
     parser = ArgumentParser()
@@ -20,8 +21,8 @@ def parse_args():
     parser.add_argument('-l', '--length', type=int, default=5, help='what length word to use.')
     parser.add_argument('-g', '--guesses', default=None, help='how many guesses')
     parser.add_argument('-n', '--num-games', type=int, default=20, help='# of games to simulate')
-    parser.add_argument('-p', '--policy', type=str.lower, choices=['random', 'smart_random', 'minimax', 'prob_greedy'], 
-        default='random', help='guessing policy')
+    parser.add_argument('-p', '--policy', type=str.lower, choices=['random', 'smart_random', 'minimax', 'prob_greedy',
+        'genetic'], default='random', help='guessing policy')
     parser.add_argument('--smart-first-guess', action='store_true', help='Use an optimal first guess.')
     parser.add_argument('--seed', type=int, default=-1, help='random seed. -1 for system time.')
     parser.add_argument('--multiprocessing', type=int, nargs='?', const=-1, help='use multiprocessing in simulation')
@@ -105,6 +106,9 @@ def main():
         policy = MinimaxGuessPolicy(first_guess=first_guess)
     elif args.policy == 'prob_greedy':
         policy = ProbabalisticGreedyGuessPolicy(first_guess=first_guess)
+    elif args.policy == 'genetic':
+        policy = GeneticGuessPolicy(first_guess=first_guess, population_size=1000, max_generations=100,
+                                    max_generation_size=1000)
 
     # create game and simulator
     game = Wordle(word_list, max_iter=args.guesses)
