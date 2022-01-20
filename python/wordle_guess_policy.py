@@ -177,13 +177,22 @@ class ProbabalisticGreedyGuessPolicy(GuessPolicy):
 
 class GeneticGuessPolicy(GuessPolicy):
 
-    def __init__(self, first_guess=None, population_size=150, max_generations=100, max_generation_size=250):
+    def __init__(self, first_guess=None, population_size=150, max_generations=100, max_eligible_size=250,
+                tournament_size=40, crossover_prob=0.5, mutate_prob=0.03, permute_prob=0.03, invert_prob=0.02,
+                fitness_const=2, diversify=True):
         super().__init__('genetic')
 
         self.first_guess_ = first_guess
-        self.population_size_ = population_size
-        self.max_generations_ = max_generations
-        self.max_generation_size_ = max_generation_size
+        self.population_size_ = int(population_size)
+        self.max_generations_ = int(max_generations)
+        self.max_eligible_size_ = int(max_eligible_size)
+        self.tournament_size_ = int(tournament_size)
+        self.crossover_prob_ = crossover_prob
+        self.mutate_prob_ = mutate_prob
+        self.permute_prob_ = permute_prob
+        self.invert_prob_ = invert_prob
+        self.fitness_const_ = fitness_const
+        self.diversify_ = diversify
         self.guess_count_ = 0
 
 
@@ -278,23 +287,23 @@ class GeneticGuessPolicy(GuessPolicy):
         generation = 0
 
         # do genetic iterations
-        while generation < self.max_generations_ and len(eligible_words) < self.max_generation_size_:
+        while generation < self.max_generations_ and len(eligible_words) < self.max_eligible_size_:
             # selection
-            fitnesses = [self.fitness(p, game_state) for p in population]
-            selected = self.selection(fitnesses, population, k=40)
+            fitnesses = [self.fitness(p, game_state, const=self.fitness_const_) for p in population]
+            selected = self.selection(fitnesses, population, k=self.tournament_size_)
 
             # new generation
             new_pop = []
             for p1, p2 in zip(selected[0::2], selected[1::2]):
-                for c in self.crossover(p1, p2, prob=0.5):
-                    c = self.mutate(c, prob=0.03)
-                    c = self.permute(c, prob=0.03)
-                    c = self.invert(c, prob=0.02)
+                for c in self.crossover(p1, p2, prob=self.crossover_prob_):
+                    c = self.mutate(c, prob=self.mutate_prob_)
+                    c = self.permute(c, prob=self.permute_prob_)
+                    c = self.invert(c, prob=self.invert_prob_)
 
-                    if c not in eligible_words and c in self.possible_guesses_:
-                        new_pop.append(c)
-                    else:
+                    if (self.diversify_ and c in eligible_words) or (c not in self.possible_guesses_):
                         new_pop.append( choice(self.possible_guesses_) )
+                    else:
+                        new_pop.append(c)
 
             population = new_pop
             eligible_words.update(population)
@@ -302,7 +311,7 @@ class GeneticGuessPolicy(GuessPolicy):
             generation += 1
 
         # choose word in eligible_words with maximum
-        best_word = max( eligible_words, key=lambda x: self.fitness(x, game_state) )
+        best_word = max( eligible_words, key=lambda x: self.fitness(x, game_state, const=self.fitness_const_) )
         return best_word
 
 
