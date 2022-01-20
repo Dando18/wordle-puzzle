@@ -23,10 +23,10 @@ class Simulator:
         self.policy_ = policy
 
     
-    def simulate_games(self, num_games=1, print_results=False):
+    def simulate_games(self, num_games=1, show_progress=True, print_results=False):
         all_stats = []
         start = time.time()
-        for idx in alive_it(range(num_games), enrich_print=False):
+        for idx in alive_it(range(num_games), enrich_print=False, disable=(not show_progress)):
             logging.info('Simulating iteration {}.'.format(idx))
 
             stats = self.simulate_game()
@@ -39,9 +39,11 @@ class Simulator:
         all_stats = np.array(all_stats)
         if print_results:
             self.print_simulation_results_(all_stats, num_games, (end-start))
+        
+        return float(np.sum(all_stats, axis=0)[1]) / num_games
 
 
-    def simulate_games_multiprocessing(self, num_games=1, print_results=False, procs=None):
+    def simulate_games_multiprocessing(self, num_games=1, show_progress=True, print_results=False, procs=None):
         from itertools import repeat
         import multiprocessing as mp
 
@@ -49,7 +51,8 @@ class Simulator:
             from os import cpu_count
             procs = cpu_count()
 
-        with mp.Pool(procs) as pool, alive_bar(num_games, enrich_print=False) as bar:
+        mean_guesses = None
+        with mp.Pool(procs) as pool, alive_bar(num_games, enrich_print=False, disable=(not show_progress)) as bar:
             start = time.time()
             
             all_stats = pool.imap_unordered(run_simulation_step, [(self, idx) for idx in range(num_games)], 
@@ -62,8 +65,11 @@ class Simulator:
             all_stats = np.array(tmp)
 
             end = time.time()
+            mean_guesses = float(np.sum(all_stats, axis=0)[1]) / num_games
             if print_results:
                 self.print_simulation_results_(all_stats, num_games, (end-start))
+            
+        return mean_guesses
 
     
     def print_simulation_results_(self, all_stats, num_games, duration):

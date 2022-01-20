@@ -108,7 +108,7 @@ def main():
         policy = ProbabalisticGreedyGuessPolicy(first_guess=first_guess)
     elif args.policy == 'genetic':
         policy = GeneticGuessPolicy(first_guess=first_guess, population_size=1000, max_generations=100,
-                                    max_generation_size=1000)
+                                    max_eligible_size=1000)
 
     # create game and simulator
     game = Wordle(word_list, max_iter=args.guesses)
