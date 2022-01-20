@@ -37,7 +37,7 @@ def main():
     word_list = read_word_list('../english-words/words_dictionary.json')
     word_list = filter_word_list(word_list, length=5)
 
-    game = Wordle(word_list, max_iter=1000)
+    game = Wordle(word_list, max_iter=100)
     policy = GeneticGuessPolicy()
     sim = Simulator(game, policy)
 
