@@ -21,7 +21,7 @@ def read_word_list(fname):
             from json import load
             return list(load(fp).keys())
         else:
-            return list(fp.readlines())
+            return list(map(lambda x: x.strip(), fp.readlines()))
 
 
 def filter_word_list(words, length=5):
