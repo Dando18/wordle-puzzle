@@ -20,4 +20,4 @@ printf "\n\nGenetic Algorithm\n=================\n"
 $EXEC --seed $SEED $FIRST_GUESS -n $LOW_ITER $MP -p genetic
 
 printf "\n\nMinimax\n=======\n"
-$EXEC --seed $SEED $FIRST_GUESS -n $LOw_ITER $MP -p minimax
+$EXEC --seed $SEED $FIRST_GUESS -n $LOW_ITER $MP -p minimax

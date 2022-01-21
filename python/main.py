@@ -11,6 +11,7 @@ from wordle import Wordle
 from wordle_simulator import Simulator
 from wordle_guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy, \
                                 GeneticGuessPolicy
+from utility import read_word_list, filter_word_list, OPTIMAL_GENETIC_PARAMS
 
 def parse_args():
     parser = ArgumentParser()
@@ -27,19 +28,6 @@ def parse_args():
     parser.add_argument('--seed', type=int, default=-1, help='random seed. -1 for system time.')
     parser.add_argument('--multiprocessing', type=int, nargs='?', const=-1, help='use multiprocessing in simulation')
     return parser.parse_args()
-
-
-def read_word_list(fname):
-    with open(fname, 'r') as fp:
-        if fname.endswith('.json'):
-            from json import load
-            return list(load(fp).keys())
-        else:
-            return list(fp.readlines())
-
-
-def filter_word_list(words, length=5):
-    return list( filter(lambda x: len(x) == length, words) )
 
 
 def smart_first_guess(words):
@@ -67,9 +55,6 @@ def smart_first_guess(words):
 
     return best_word
             
-
-
-
 
 def main():
     args = parse_args()
@@ -107,8 +92,7 @@ def main():
     elif args.policy == 'prob_greedy':
         policy = ProbabalisticGreedyGuessPolicy(first_guess=first_guess)
     elif args.policy == 'genetic':
-        policy = GeneticGuessPolicy(first_guess=first_guess, population_size=1000, max_generations=100,
-                                    max_eligible_size=1000)
+        policy = GeneticGuessPolicy(first_guess=first_guess, **OPTIMAL_GENETIC_PARAMS)
 
     # create game and simulator
     game = Wordle(word_list, max_iter=args.guesses)

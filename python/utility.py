@@ -1,5 +1,34 @@
 import logging
 
+
+OPTIMAL_GENETIC_PARAMS = {
+    'crossover_prob': 0.31205820872312595, 
+    'diversify': True, 
+    'fitness_const': 7.0, 
+    'invert_prob': 0.025779667955558305, 
+    'max_eligible_size': 1000.0, #500.0, 
+    'max_generations': 50, 
+    'mutate_prob': 0.09457252541449512, 
+    'permute_prob': 0.06168892887298874, 
+    'population_size': 5000.0, #1000.0, 
+    'tournament_size': 90.0
+    }
+
+
+def read_word_list(fname):
+    with open(fname, 'r') as fp:
+        if fname.endswith('.json'):
+            from json import load
+            return list(load(fp).keys())
+        else:
+            return list(fp.readlines())
+
+
+def filter_word_list(words, length=5):
+    return list( filter(lambda x: len(x) == length, words) )
+
+
+
 def remove_impossible_words_(last_state, word_list):
     ''' Several guess policies use this, so just a helper for code re-use.
     '''
