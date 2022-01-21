@@ -11,7 +11,7 @@ from wordle import Wordle
 from wordle_simulator import Simulator
 from wordle_guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy, \
                                 GeneticGuessPolicy
-from utility import read_word_list, filter_word_list
+from utility import read_word_list, filter_word_list, OPTIMAL_GENETIC_PARAMS
 
 def parse_args():
     parser = ArgumentParser()
@@ -92,8 +92,7 @@ def main():
     elif args.policy == 'prob_greedy':
         policy = ProbabalisticGreedyGuessPolicy(first_guess=first_guess)
     elif args.policy == 'genetic':
-        policy = GeneticGuessPolicy(first_guess=first_guess, population_size=1000, max_generations=100,
-                                    max_eligible_size=1000)
+        policy = GeneticGuessPolicy(first_guess=first_guess, **OPTIMAL_GENETIC_PARAMS)
 
     # create game and simulator
     game = Wordle(word_list, max_iter=args.guesses)

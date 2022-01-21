@@ -1,6 +1,20 @@
 import logging
 
 
+OPTIMAL_GENETIC_PARAMS = {
+    'crossover_prob': 0.31205820872312595, 
+    'diversify': True, 
+    'fitness_const': 7.0, 
+    'invert_prob': 0.025779667955558305, 
+    'max_eligible_size': 1000.0, #500.0, 
+    'max_generations': 50, 
+    'mutate_prob': 0.09457252541449512, 
+    'permute_prob': 0.06168892887298874, 
+    'population_size': 5000.0, #1000.0, 
+    'tournament_size': 90.0
+    }
+
+
 def read_word_list(fname):
     with open(fname, 'r') as fp:
         if fname.endswith('.json'):
