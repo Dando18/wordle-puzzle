@@ -6,11 +6,11 @@ OPTIMAL_GENETIC_PARAMS = {
     'diversify': True, 
     'fitness_const': 7.0, 
     'invert_prob': 0.025779667955558305, 
-    'max_eligible_size': 15918.0, #500.0, 
+    'max_eligible_size': 2315.0, #500.0, 
     'max_generations': 50, 
     'mutate_prob': 0.09457252541449512, 
     'permute_prob': 0.06168892887298874, 
-    'population_size': 15918.0, #1000.0, 
+    'population_size': 2315.0, #1000.0, 
     'tournament_size': 100.0 #90.0
     }
 
