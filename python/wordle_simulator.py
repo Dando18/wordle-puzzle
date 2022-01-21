@@ -54,6 +54,7 @@ class Simulator:
         if procs is None:
             from os import cpu_count
             procs = cpu_count()
+        logging.info('Using {} cpus to simulate {} games.'.format(procs, num_games))
 
         mean_guesses = None
         with mp.Pool(procs) as pool, alive_bar(num_games, enrich_print=False, disable=(not show_progress)) as bar:
