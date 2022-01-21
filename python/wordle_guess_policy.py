@@ -7,7 +7,7 @@ from string import ascii_lowercase
 
 import numpy as np
 
-from utility import remove_impossible_words_
+from utility import remove_impossible_words_, hits
 
 
 class GuessPolicy(ABC):
@@ -71,29 +71,11 @@ class MinimaxGuessPolicy(GuessPolicy):
         self.possible_guesses_ = remove_impossible_words_(last_state, self.possible_guesses_)
 
 
-    def hits(self, a, b):
-        matches, misplaced = 0, 0
-        for idx, a_char in enumerate(a):
-            if a_char == b[idx]:
-                matches += 1
-            elif a_char in b:
-                misplaced += 1
-        return matches, misplaced
-    
-
-    # this version is much slower
-    #def hits(self, a, b):
-    #    total_matches = sum((Counter(a) & Counter(b)).values())
-    #    same_pos_matches = sum(x == y for x, y in zip(a, b))
-    #    misplaced_matches = total_matches - same_pos_matches
-    #    return same_pos_matches, misplaced_matches
-
-
     def score(self, word):
         ''' Returns the maximum # of possible remaining words left if you were to guess word.
         '''
         # max number of hits 
-        return max( Counter(self.hits(word, x) for x in self.possible_guesses_).values() )
+        return max( Counter(hits(word, x) for x in self.possible_guesses_).values() )
 
 
     def next_guess(self, game_state, game):
@@ -221,18 +203,11 @@ class GeneticGuessPolicy(GuessPolicy):
         self.possible_guesses_ = remove_impossible_words_(last_state, self.possible_guesses_)
 
 
-    def hits(self, a, b):
-        total_matches = sum((Counter(a) & Counter(b)).values())
-        same_pos_matches = sum(x == y for x, y in zip(a, b))
-        misplaced_matches = total_matches - same_pos_matches
-        return same_pos_matches, misplaced_matches
-
-
     def fitness(self, word, game_state, const=2):
         sum = 0
         for guess, result in game_state:
             match, misplaced = result.count('CORRECT'), result.count('MISPLACED')
-            pos_match, pos_misplaced = self.hits(guess, word)
+            pos_match, pos_misplaced = hits(guess, word)
 
             sum += abs(pos_match - match) + abs(pos_misplaced - misplaced)
 

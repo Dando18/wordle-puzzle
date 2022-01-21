@@ -35,3 +35,21 @@ def remove_impossible_words_(last_state, word_list):
     total_removed = len(word_list) - len(new_possible_guesses)
     logging.debug('Removed {} words from list. {} remaining.'.format(total_removed, len(new_possible_guesses)))
     return new_possible_guesses
+
+
+def hits(a, b):
+    matches, misplaced = 0, 0
+    for idx, a_char in enumerate(a):
+        if a_char == b[idx]:
+            matches += 1
+        elif a_char in b:
+            misplaced += 1
+    return matches, misplaced
+    
+
+# this version is much slower
+def hits_slow(a, b):
+   total_matches = sum((Counter(a) & Counter(b)).values())
+   same_pos_matches = sum(x == y for x, y in zip(a, b))
+   misplaced_matches = total_matches - same_pos_matches
+   return same_pos_matches, misplaced_matches
