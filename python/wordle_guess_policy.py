@@ -71,17 +71,29 @@ class MinimaxGuessPolicy(GuessPolicy):
         self.possible_guesses_ = remove_impossible_words_(last_state, self.possible_guesses_)
 
 
+    def hits(self, a, b):
+        matches, misplaced = 0, 0
+        for idx, a_char in enumerate(a):
+            if a_char == b[idx]:
+                matches += 1
+            elif a_char in b:
+                misplaced += 1
+        return matches, misplaced
+    
+
+    # this version is much slower
+    #def hits(self, a, b):
+    #    total_matches = sum((Counter(a) & Counter(b)).values())
+    #    same_pos_matches = sum(x == y for x, y in zip(a, b))
+    #    misplaced_matches = total_matches - same_pos_matches
+    #    return same_pos_matches, misplaced_matches
+
+
     def score(self, word):
         ''' Returns the maximum # of possible remaining words left if you were to guess word.
         '''
-        def hits(a, b):
-            total_matches = sum((Counter(a) & Counter(b)).values())
-            same_pos_matches = sum(x == y for x, y in zip(a, b))
-            misplaced_matches = total_matches - same_pos_matches
-            return same_pos_matches, misplaced_matches
-
         # max number of hits 
-        return max( Counter(hits(word, x) for x in self.possible_guesses_).values() )
+        return max( Counter(self.hits(word, x) for x in self.possible_guesses_).values() )
 
 
     def next_guess(self, game_state, game):
@@ -105,7 +117,6 @@ class MinimaxGuessPolicy(GuessPolicy):
 
     def reset(self):
         self.guess_count_ = 0
-        self.possible_guesses_ = []
 
 
 class ProbabalisticGreedyGuessPolicy(GuessPolicy):
