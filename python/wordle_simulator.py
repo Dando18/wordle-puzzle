@@ -117,6 +117,9 @@ class Simulator:
             result = self.game_.guess(guess)
             game_state.append((guess, result))
 
+            if result is None:
+                break
+
             num_guesses += 1
             num_letters_guessed += len(guess)
             num_correct_letters_guessed += result.count('CORRECT')
@@ -124,9 +127,6 @@ class Simulator:
             num_incorrect_letters_guessed += result.count('INCORRECT')
 
             logging.debug('guess {}:  {} -> {}'.format(num_guesses, guess, result))
-
-            if result is None:
-                keep_guessing = False
 
             if result and result.count('CORRECT') == len(result):
                 keep_guessing = False
