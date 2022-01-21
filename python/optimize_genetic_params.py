@@ -2,7 +2,7 @@
 '''
 from functools import partial
 
-from hyperopt import fmin, tpe, hp
+from hyperopt import fmin, tpe, hp, space_eval
 
 from wordle import Wordle
 from wordle_simulator import Simulator
@@ -14,6 +14,20 @@ MAX_SIM_ITER = 20
 MAX_OBJ_EVALS = 200
 MP_PROCS = 4
 
+# from training over 200 iterations with max 20 games per iteration
+# achieved 6.95
+OPTIMAL = {
+    'crossover_prob': 0.31205820872312595, 
+    'diversify': True, 
+    'fitness_const': 7.0, 
+    'invert_prob': 0.025779667955558305, 
+    'max_eligible_size': 500.0, 
+    'max_generations': 50, 
+    'mutate_prob': 0.09457252541449512, 
+    'permute_prob': 0.06168892887298874, 
+    'population_size': 1000.0, 
+    'tournament_size': 90.0
+    }
 
 def objective(simulator, kwargs):
     simulator.policy_ = GeneticGuessPolicy(first_guess='cares', **kwargs)
@@ -50,6 +64,7 @@ def main():
             max_evals=MAX_OBJ_EVALS)
 
     print(best)
+    print(space_eval(search_space, best))
 
 
 if __name__ == '__main__':
