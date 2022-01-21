@@ -11,6 +11,7 @@ from wordle_guess_policy import GeneticGuessPolicy
 
 MAX_SIM_ITER = 10
 MAX_OBJ_EVALS = 200
+MP_PROCS = 4
 
 
 def read_word_list(fname):
@@ -28,7 +29,7 @@ def filter_word_list(words, length=5):
 
 def objective(simulator, kwargs):
     simulator.policy_ = GeneticGuessPolicy(first_guess='cares', **kwargs)
-    return simulator.simulate_games_multiprocessing(num_games=MAX_SIM_ITER, show_progress=False, procs=4)
+    return simulator.simulate_games_multiprocessing(num_games=MAX_SIM_ITER, show_progress=False, procs=MP_PROCS)
 
 
 def main():
