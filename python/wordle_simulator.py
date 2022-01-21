@@ -26,11 +26,15 @@ class Simulator:
     def simulate_games(self, num_games=1, show_progress=True, print_results=False):
         all_stats = []
         start = time.time()
-        for idx in alive_it(range(num_games), enrich_print=False, disable=(not show_progress)):
+        bar = alive_it(range(num_games), enrich_print=False, disable=(not show_progress))
+        guess_sum = 0
+        for idx in bar:
             logging.info('Simulating iteration {}.'.format(idx))
 
             stats = self.simulate_game()
             all_stats.append(list(stats))
+            guess_sum += stats[1]
+            bar.text('Avg. # Guesses: {:.3f}'.format(guess_sum / (idx+1)))
 
             self.game_.reset(update_word=True)
             self.policy_.reset()
@@ -59,9 +63,12 @@ class Simulator:
                 chunksize=num_games//(procs**2)+1)
 
             tmp = []
+            guess_sum = 0
             for s in all_stats:
                 tmp.append(s)
+                guess_sum += s[1]
                 bar()
+                bar.text('Avg. # Guesses: {:.3f}'.format(guess_sum / len(tmp)))
             all_stats = np.array(tmp)
 
             end = time.time()
