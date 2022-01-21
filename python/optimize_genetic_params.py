@@ -9,7 +9,7 @@ from wordle_simulator import Simulator
 from wordle_guess_policy import GeneticGuessPolicy
 
 
-MAX_SIM_ITER = 10
+MAX_SIM_ITER = 20
 MAX_OBJ_EVALS = 200
 MP_PROCS = 4
 
