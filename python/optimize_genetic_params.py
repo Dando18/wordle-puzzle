@@ -51,7 +51,7 @@ def main():
         'mutate_prob': hp.uniform('mutate_prob', 0.01, 0.1),
         'permute_prob': hp.uniform('permute_prob', 0.01, 0.1),
         'invert_prob': hp.uniform('invert_prob', 0.01, 0.1),
-        'fitness_const': hp.quniform('fitness_const', 1, 10, 1),
+        'fitness_const': hp.quniform('fitness_const', 0, 10, 1),
         'diversify': hp.choice('diversify', [True, False])
     }
 
