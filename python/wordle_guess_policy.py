@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from collections import Counter
-from itertools import product
+from itertools import product, repeat
 import logging
-from random import choice, sample, randrange, random
+from random import choice, sample, randrange, random, shuffle
 from string import ascii_lowercase
+
+import numpy as np
 
 from utility import remove_impossible_words_
 
@@ -36,17 +38,25 @@ class RandomGuessPolicy(GuessPolicy):
     def next_guess(self, game_state, game):
         if self.guess_count_ == 0:
             self.possible_guesses_ = game.word_list().copy()
+
+            if self.reduce_:
+                self.guess_count_ += 1
+                return choice(self.possible_guesses_)
+            else:
+                self.guess_indices_ = list(range(len(self.possible_guesses_)))
+                shuffle(self.guess_indices_)
+
         self.guess_count_ += 1
 
         if self.reduce_ and self.guess_count_ != 1:
             self.possible_guesses_ = remove_impossible_words_(game_state[-1], self.possible_guesses_)
+            return choice(self.possible_guesses_)
 
-        return choice(self.possible_guesses_)
+        return self.possible_guesses_[self.guess_indices_.pop()]
 
 
     def reset(self):
         self.guess_count_ = 0
-        self.possible_guesses_ = []
 
 
 class MinimaxGuessPolicy(GuessPolicy):
@@ -312,6 +322,38 @@ class GeneticGuessPolicy(GuessPolicy):
 
         # choose word in eligible_words with maximum
         best_word = max( eligible_words, key=lambda x: self.fitness(x, game_state, const=self.fitness_const_) )
+        return best_word
+
+
+    def reset(self):
+        self.guess_count_ = 0
+
+
+class RLGuessPolicy(GuessPolicy):
+
+    def __init__(self, model):
+        super().__init__('rl')
+        self.guess_count_ = 0
+        self.model_ = model
+
+    
+    def result_to_observation(self, result):
+        vals = {'CORRECT': 0, 'MISPLACED': 1, 'INCORRECT': 2}
+        return np.array([vals[x] for x in result]).astype(np.int32)
+
+
+    def next_guess(self, game_state, game):
+
+        self.guess_count_ += 1
+
+        if len(game_state) > 0:
+            obs = self.result_to_observation(game_state[-1][1])
+        else:
+            obs = list(repeat(2, game.word_length()))
+
+        action, _states = self.model_.predict(obs, deterministic=True)
+
+        best_word = game.word_list()[action]
         return best_word
 
 
