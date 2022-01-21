@@ -1,5 +1,20 @@
 import logging
 
+
+def read_word_list(fname):
+    with open(fname, 'r') as fp:
+        if fname.endswith('.json'):
+            from json import load
+            return list(load(fp).keys())
+        else:
+            return list(fp.readlines())
+
+
+def filter_word_list(words, length=5):
+    return list( filter(lambda x: len(x) == length, words) )
+
+
+
 def remove_impossible_words_(last_state, word_list):
     ''' Several guess policies use this, so just a helper for code re-use.
     '''

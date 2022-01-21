@@ -7,24 +7,12 @@ from hyperopt import fmin, tpe, hp
 from wordle import Wordle
 from wordle_simulator import Simulator
 from wordle_guess_policy import GeneticGuessPolicy
+from utility import read_word_list, filter_word_list
 
 
 MAX_SIM_ITER = 20
 MAX_OBJ_EVALS = 200
 MP_PROCS = 4
-
-
-def read_word_list(fname):
-    with open(fname, 'r') as fp:
-        if fname.endswith('.json'):
-            from json import load
-            return list(load(fp).keys())
-        else:
-            return list(fp.readlines())
-
-
-def filter_word_list(words, length=5):
-    return list( filter(lambda x: len(x) == length, words) )
 
 
 def objective(simulator, kwargs):
