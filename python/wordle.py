@@ -50,3 +50,6 @@ class Wordle:
     def word_list(self):
         return self.words_
 
+    def word_length(self):
+        return len(self.words_[0])
+
