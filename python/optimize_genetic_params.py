@@ -15,7 +15,7 @@ MAX_OBJ_EVALS = 200
 MP_PROCS = 4
 
 # from training over 200 iterations with max 20 games per iteration
-# achieved 6.95
+# achieved 6.95 on full word list
 OPTIMAL = {
     'crossover_prob': 0.31205820872312595, 
     'diversify': True, 
@@ -31,14 +31,16 @@ OPTIMAL = {
 
 def objective(simulator, kwargs):
     simulator.policy_ = GeneticGuessPolicy(first_guess='cares', **kwargs)
-    return simulator.simulate_games_multiprocessing(num_games=MAX_SIM_ITER, show_progress=False, procs=MP_PROCS)
+    return simulator.simulate_games_multiprocessing(num_games=MAX_SIM_ITER, 
+                                        show_progress=False, procs=MP_PROCS)
 
 
 def main():
 
     # read in word list and preprocess (about 16000 5 letter words)
-    word_list = read_word_list('../english-words/words_dictionary.json')
-    word_list = filter_word_list(word_list, length=5)
+    #word_list = read_word_list('../english-words/words_dictionary.json')
+    word_list = read_word_list('../wordle-word-list-solutions.txt')
+    #word_list = filter_word_list(word_list, length=5)
 
     game = Wordle(word_list, max_iter=100)
     policy = GeneticGuessPolicy()
