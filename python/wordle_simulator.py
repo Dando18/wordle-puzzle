@@ -82,9 +82,11 @@ class Simulator:
     
     def print_simulation_results_(self, all_stats, num_games, duration):
         cum_stats = np.sum(all_stats, axis=0)
+        perc_le_6 = (all_stats[:,1] <= 6).sum() / num_games * 100.0
 
         print('# Games: {}'.format(num_games))
         print('# Wins:  {}'.format(cum_stats[0]))
+        print('% <= 6 Guesses:    {:.3f}'.format(perc_le_6))
         print('Avg Time per Game: {:.3f} sec'.format(duration/num_games))
         print('Max # Guesses:     {:}'.format(all_stats[:,1].max()))
         print('Min # Guesses:     {:}'.format(all_stats[:,1].min()))
@@ -96,10 +98,10 @@ class Simulator:
         print('% Incorrect Letters: {:.3f}'.format(float(cum_stats[5]) / cum_stats[2] * 100))
 
         print()
-        print('policy,num_games,num_wins,avg_time,max_guesses,min_guesses,avg_guesses,median_guesses,std_guesses,' + 
+        print('policy,num_games,num_wins,perc_le_6,avg_time,max_guesses,min_guesses,avg_guesses,median_guesses,std_guesses,' + 
             'perc_correct_letters,perc_misplaced_letters,perc_incorrect_letters')
         print(','.join(map(str, 
-                [self.policy_.name_, num_games, cum_stats[0], duration/num_games, all_stats[:,1].max(), 
+                [self.policy_.name_, num_games, cum_stats[0], perc_le_6, duration/num_games, all_stats[:,1].max(), 
                 all_stats[:,1].min(), cum_stats[1] / num_games, np.median(all_stats[:,1]), all_stats.std(axis=0)[1], 
                 float(cum_stats[3]) / cum_stats[2] * 100, float(cum_stats[4]) / cum_stats[2] * 100, 
                 float(cum_stats[5]) / cum_stats[2] * 100]))
