@@ -321,8 +321,17 @@ class RLGuessPolicy(GuessPolicy):
         super().__init__('rl')
         self.guess_count_ = 0
         self.model_ = model
+        #self.encoded_game_state_ = list(repeat(26, game.word_length()))
 
-    
+
+    def updated_encoded_game_state(self, last_state):
+        guess, result = last_state
+        for idx, (letter, res) in enumerate(zip(guess, result)):
+            dig = ord(letter) - 97
+            if res == 'CORRECT':
+                self.encoded_game_state_[idx] = dig
+
+
     def result_to_observation(self, result):
         vals = {'CORRECT': 0, 'MISPLACED': 1, 'INCORRECT': 2}
         return np.array([vals[x] for x in result]).astype(np.int32)
@@ -333,9 +342,13 @@ class RLGuessPolicy(GuessPolicy):
         self.guess_count_ += 1
 
         if len(game_state) > 0:
-            obs = self.result_to_observation(game_state[-1][1])
+            #obs = self.result_to_observation(game_state[-1][1])
+            self.updated_encoded_game_state(game_state[-1])
         else:
-            obs = list(repeat(2, game.word_length()))
+            #obs = list(repeat(2, game.word_length()))
+            self.encoded_game_state_ = list(repeat(26, game.word_length()))
+        
+        obs = np.array(self.encoded_game_state_).astype(np.int32)
 
         action, _states = self.model_.predict(obs, deterministic=True)
 

@@ -22,20 +22,32 @@ class WordleEnv(gym.Env):
         self.last_score_ = 0
         self.word_length_ = self.game_.word_length()
         self.num_actions_ = len(self.game_.word_list())
+        self.encoded_game_state_ = list(repeat(26, self.word_length_))  # all unknown
 
         self.action_space = spaces.Discrete(self.num_actions_)
-        self.observation_space = spaces.MultiDiscrete(list(repeat(3, self.word_length_)))
+        #self.observation_space = spaces.MultiDiscrete(list(repeat(3, self.word_length_)))
+        control_lengths = list(repeat(26 + 1, self.word_length_))
+        self.observation_space = spaces.MultiDiscrete(control_lengths)
 
 
     def get_random_index(self):
         return randrange(self.num_actions_)
 
     
+    def updated_encoded_game_state(self, last_state):
+        guess, result = last_state
+        for idx, (letter, res) in enumerate(zip(guess, result)):
+            dig = ord(letter) - 97
+            if res == 'CORRECT':
+                self.encoded_game_state_[idx] = dig
+
+    
     def reset(self):
         self.last_score_ = 0
+        self.encoded_game_state_ = list(repeat(26, self.word_length_))  # all unknown
         self.game_.reset(update_word=True)
         selected_word_idx = self.get_random_index()
-        return np.array(list(repeat(2, self.word_length_))).astype(np.int32)
+        return np.array(self.encoded_game_state_).astype(np.int32)
 
     
     def result_to_observation(self, result):
@@ -66,7 +78,9 @@ class WordleEnv(gym.Env):
         info = {}
 
         # observation
-        observation = self.result_to_observation(result)
+        #observation = self.result_to_observation(result)
+        self.updated_encoded_game_state((selected_word, result))
+        observation = np.array(self.encoded_game_state_).astype(np.int32)
 
         return observation, reward, done, info
 
@@ -75,7 +89,8 @@ class WordleEnv(gym.Env):
 
 def main():
     # read in word list and preprocess
-    word_list = read_word_list('../english-words/words_dictionary.json')
+    #word_list = read_word_list('../english-words/words_dictionary.json')
+    word_list = read_word_list('../wordle-word-list-solutions.txt')
     word_list = filter_word_list(word_list, length=5)
 
     # setup game and environment
