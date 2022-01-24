@@ -1,7 +1,7 @@
 import logging
 
 
-OPTIMAL_GENETIC_PARAMS = {
+OPTIMAL_GENETIC_PARAMS_1 = {
     'crossover_prob': 0.7, #0.31205820872312595, 
     'diversify': True, 
     'fitness_const': 7.0, 
@@ -13,6 +13,19 @@ OPTIMAL_GENETIC_PARAMS = {
     'population_size': 2315.0, #1000.0, 
     'tournament_size': 100.0 #90.0
     }
+
+OPTIMAL_GENETIC_PARAMS_2 = {
+    'crossover_prob': 0.21735364380774497, 
+    'diversify': True, 
+    'fitness_const': 3.0, 
+    'invert_prob': 0.07177908907646954, 
+    'max_eligible_size': 2315.0, 
+    'max_generations': 20, 
+    'mutate_prob': 0.021783885874393852, 
+    'permute_prob': 0.025962069411094947, 
+    'population_size': 2315.0, #1200.0, 
+    'tournament_size': 130.0
+}
 
 
 def read_word_list(fname):
