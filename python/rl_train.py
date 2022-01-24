@@ -13,7 +13,7 @@ from stable_baselines3 import DQN
 
 from wordle import Wordle
 from simulator import Simulator
-from wordle_guess_policy import RLGuessPolicy
+from guess_policy import RLGuessPolicy
 from utility import read_word_list, filter_word_list
 
 

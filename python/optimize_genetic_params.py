@@ -8,7 +8,7 @@ from hyperopt import fmin, tpe, hp, space_eval
 
 from wordle import Wordle
 from simulator import Simulator
-from wordle_guess_policy import GeneticGuessPolicy
+from guess_policy import GeneticGuessPolicy
 from utility import read_word_list, filter_word_list
 
 

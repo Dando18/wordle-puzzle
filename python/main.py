@@ -9,8 +9,7 @@ import random
 
 from wordle import Wordle
 from simulator import Simulator
-from wordle_guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy, \
-                                GeneticGuessPolicy
+from guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy, GeneticGuessPolicy
 from utility import read_word_list, filter_word_list, OPTIMAL_GENETIC_PARAMS_1, OPTIMAL_GENETIC_PARAMS_2
 
 def parse_args():
