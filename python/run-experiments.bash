@@ -3,7 +3,7 @@
 # date: January 2022
 
 EXEC="python3 main.py"
-LIST="../wordle-word-list-solutions.txt"
+LIST="../word-list-solutions.txt"
 SEED="42"
 FIRST_GUESS="--smart-first-guess"
 ITER="5000"
