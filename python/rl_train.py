@@ -94,7 +94,7 @@ class WordleEnv(gym.Env):
 def main():
     # read in word list and preprocess
     #word_list = read_word_list('../english-words/words_dictionary.json')
-    word_list = read_word_list('../wordle-word-list-solutions.txt')
+    word_list = read_word_list('../word-list-solutions.txt')
     word_list = filter_word_list(word_list, length=5)
 
     # setup game and environment
