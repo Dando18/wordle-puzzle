@@ -17,8 +17,8 @@ def best_guess(words):
 
 
 def main():
-    word_list_1 = read_word_list('../wordle-word-list-solutions.txt')
-    word_list_2 = read_word_list('../wordle-word-list-non-solutions.txt')
+    word_list_1 = read_word_list('../word-list-solutions.txt')
+    word_list_2 = read_word_list('../word-list-non-solutions.txt')
     alpha_list = read_word_list('../english-words/words_dictionary.json')
     alpha_list = filter_word_list(alpha_list)
 
