@@ -215,6 +215,7 @@ class GeneticGuessPolicy(GuessPolicy):
 
 
     def selection(self, fitnesses, population, k=20, keep_size=True):
+        k = min(k, len(population))
         def random_tournament():
             selected_idx = randrange(len(population))
 
@@ -275,10 +276,15 @@ class GeneticGuessPolicy(GuessPolicy):
         self.guess_count_ += 1
 
         # remove words which cannot be used
-        #self.remove_impossible_words(game_state[-1])
+        self.remove_impossible_words(game_state[-1])
+        if len(self.possible_guesses_) == 1:
+            return self.possible_guesses_[0]
+        elif len(self.possible_guesses_) == 0:
+            return None
 
         # create population
-        population = sample(self.possible_guesses_, self.population_size_)
+        sample_size = min(self.population_size_, len(self.possible_guesses_))
+        population = sample(self.possible_guesses_, sample_size)
         eligible_words = set()
         generation = 0
 
