@@ -10,7 +10,7 @@ from wordle_guess_policy import GeneticGuessPolicy
 from utility import read_word_list, filter_word_list
 
 
-MAX_SIM_ITER = 20
+MAX_SIM_ITER = 50
 MAX_OBJ_EVALS = 200
 MP_PROCS = 4
 
@@ -30,7 +30,7 @@ OPTIMAL = {
     }
 
 def objective(simulator, kwargs):
-    simulator.policy_ = GeneticGuessPolicy(first_guess='cares', **kwargs)
+    simulator.policy_ = GeneticGuessPolicy(first_guess='scare', **kwargs)
     return simulator.simulate_games_multiprocessing(num_games=MAX_SIM_ITER, 
                                         show_progress=False, procs=MP_PROCS)
 
@@ -48,11 +48,11 @@ def main():
 
     obj = partial(objective, sim)
     search_space = {
-        'population_size': hp.quniform('population_size', 100, 1000, 200),
+        'population_size': hp.quniform('population_size', 100, 2315, 200),
         'max_generations': hp.choice('max_generations', [20, 50, 100, 200]),
-        'max_eligible_size': hp.quniform('max_eligible_size', 50, 500, 50),
-        'tournament_size': hp.quniform('tournament_size', 10, 100, 10),
-        'crossover_prob': hp.uniform('crossover_prob', 0.3, 0.8),
+        'max_eligible_size': hp.quniform('max_eligible_size', 50, 2315, 50),
+        'tournament_size': hp.quniform('tournament_size', 10, 200, 10),
+        'crossover_prob': hp.uniform('crossover_prob', 0.1, 0.9),
         'mutate_prob': hp.uniform('mutate_prob', 0.01, 0.1),
         'permute_prob': hp.uniform('permute_prob', 0.01, 0.1),
         'invert_prob': hp.uniform('invert_prob', 0.01, 0.1),
