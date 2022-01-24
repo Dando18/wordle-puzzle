@@ -1,4 +1,7 @@
-
+''' Simulate a Mastermind/Wordle like game and record stats.
+    author: Daniel Nichols
+    date: January 2022
+'''
 from collections import Counter
 import logging
 from random import choice

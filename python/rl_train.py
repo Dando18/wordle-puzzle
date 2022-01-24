@@ -1,3 +1,7 @@
+''' Train an RL model to play Mastermind/Wordle like games.
+    author: Daniel Nichols
+    date: January 2022
+'''
 from itertools import repeat
 from random import randrange
 
@@ -8,7 +12,7 @@ from stable_baselines3.common.env_checker import check_env
 from stable_baselines3 import DQN
 
 from wordle import Wordle
-from wordle_simulator import Simulator
+from simulator import Simulator
 from wordle_guess_policy import RLGuessPolicy
 from utility import read_word_list, filter_word_list
 

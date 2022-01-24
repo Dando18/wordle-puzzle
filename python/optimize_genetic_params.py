@@ -1,11 +1,13 @@
-''' A script for optimizing
+''' A script for optimizing the genetic guessing policy.
+    author: Daniel Nichols
+    date: January 2022
 '''
 from functools import partial
 
 from hyperopt import fmin, tpe, hp, space_eval
 
 from wordle import Wordle
-from wordle_simulator import Simulator
+from simulator import Simulator
 from wordle_guess_policy import GeneticGuessPolicy
 from utility import read_word_list, filter_word_list
 

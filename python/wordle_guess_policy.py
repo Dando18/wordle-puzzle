@@ -1,3 +1,7 @@
+''' Define a bunch of guessing policies for Mastermind/Wordle like games.
+    author: Daniel Nichols
+    date: January 2022
+'''
 from abc import ABC, abstractmethod
 from collections import Counter
 from itertools import product, repeat
@@ -11,6 +15,8 @@ from utility import remove_impossible_words_, hits
 
 
 class GuessPolicy(ABC):
+    ''' Abstract guessing policy.
+    '''
 
     def __init__(self, name):
         super().__init__()
@@ -26,6 +32,8 @@ class GuessPolicy(ABC):
 
 
 class RandomGuessPolicy(GuessPolicy):
+    ''' Randomly select the next word
+    '''
 
     def __init__(self, reduce=False):
         super().__init__('smart_random' if reduce else 'random')
@@ -60,6 +68,8 @@ class RandomGuessPolicy(GuessPolicy):
 
 
 class MinimaxGuessPolicy(GuessPolicy):
+    ''' Select the next word based on a minimax strategy.
+    '''
 
     def __init__(self, first_guess=None):
         super().__init__('minimax')
@@ -102,6 +112,8 @@ class MinimaxGuessPolicy(GuessPolicy):
 
 
 class ProbabalisticGreedyGuessPolicy(GuessPolicy):
+    ''' Selects the most probable next word.
+    '''
 
     def __init__(self, first_guess=None):
         super().__init__('probabilistic_greedy')
@@ -179,6 +191,8 @@ class ProbabalisticGreedyGuessPolicy(GuessPolicy):
 
 
 class GeneticGuessPolicy(GuessPolicy):
+    ''' Uses a genetic algorithm to find the next best word.
+    '''
 
     def __init__(self, first_guess=None, population_size=150, max_generations=100, max_eligible_size=250,
                 tournament_size=40, crossover_prob=0.5, mutate_prob=0.03, permute_prob=0.03, invert_prob=0.02,
@@ -322,6 +336,8 @@ class GeneticGuessPolicy(GuessPolicy):
 
 
 class RLGuessPolicy(GuessPolicy):
+    ''' Use a pretrained RL model as a guessing policy.
+    '''
 
     def __init__(self, model):
         super().__init__('rl')

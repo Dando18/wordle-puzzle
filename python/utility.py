@@ -1,3 +1,8 @@
+''' Helfpul utilities and constants.
+    author: Daniel Nichols
+    date: January 2022
+'''
+
 import logging
 
 

@@ -1,6 +1,6 @@
-''' Wordle simulator and/or AI
-author: Daniel Nichols
-date:  January 2021
+''' Wordle simulator and/or AI.
+    author: Daniel Nichols
+    date:  January 2021
 '''
 from argparse import ArgumentParser
 from collections import Counter
@@ -8,7 +8,7 @@ import logging
 import random
 
 from wordle import Wordle
-from wordle_simulator import Simulator
+from simulator import Simulator
 from wordle_guess_policy import RandomGuessPolicy, MinimaxGuessPolicy, ProbabalisticGreedyGuessPolicy, \
                                 GeneticGuessPolicy
 from utility import read_word_list, filter_word_list, OPTIMAL_GENETIC_PARAMS_1, OPTIMAL_GENETIC_PARAMS_2

@@ -1,4 +1,6 @@
 #!/bin/bash
+# author: Daniel Nichols
+# date: January 2022
 
 EXEC="python3 main.py"
 LIST="../wordle-word-list-solutions.txt"

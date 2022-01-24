@@ -1,3 +1,7 @@
+''' Script for calculating stats on word lists.
+    author: Daniel Nichols
+    date: January 2022
+'''
 from collections import Counter
 
 from utility import read_word_list, filter_word_list, hits
@@ -9,7 +13,6 @@ def list_overlap(list1, list2):
 
 def best_guess(words):
     # find the maximum average number of matches
-    #print(Counter(hits('cigar', w) for w in words))
     return max(words, key=lambda x: sum(hits(x, w)[0] for w in words)/len(words))
 
 

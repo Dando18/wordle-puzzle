@@ -1,3 +1,7 @@
+''' Game agent for the game of Wordle.
+    author: Daniel Nichols
+    date: January 2022
+'''
 import logging
 from random import choice
 
